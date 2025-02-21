@@ -13,6 +13,15 @@ public:
   void resized() override;
 
 private:
+  // sliders and they attachments
+  juce::Slider down1Slider;
+  std::unique_ptr<apvts::SliderAttachment> d1Attach;
+  juce::Slider down2Slider;
+  std::unique_ptr<apvts::SliderAttachment> d2Attach;
+  juce::Slider upSlider;
+  std::unique_ptr<apvts::SliderAttachment> upAttach;
+  juce::Slider wetSlider;
+  std::unique_ptr<apvts::SliderAttachment> wetDryAttach;
   // This reference is provided as a quick way for your editor to
   // access the processor object that created it.
   AudioPluginAudioProcessor& processorRef;
