@@ -38,7 +38,7 @@ void BandShifter::prepare(double sample_rate) {
 void BandShifter::update(float sample) {
   update_filter(sample);
   update_up1();
-  // update_down1();
+  update_down1();
   // update_down2();
 }
 

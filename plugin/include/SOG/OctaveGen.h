@@ -35,7 +35,7 @@ public:
 private:
   float centerFreq;
   float bandwidth;
-  float _d0 = 0;
+  float _d0 = 0.0f;
   std::complex<float> _d1;
   std::complex<float> _d2;
   std::complex<float> _c1;
@@ -45,12 +45,12 @@ private:
   std::complex<float> _s2;
 
   std::complex<float> _y;
-  float _up1 = 0;
+  float _up1 = 0.0f;
   std::complex<float> _down1;
-  float _down2 = 0;
+  float _down2 = 0.0f;
 
-  float _down1_sign = 1;
-  float _down2_sign = 1;
+  float _down1_sign = 1.0f;
+  float _down2_sign = 1.0f;
 
   void update_filter(float sample);
   void update_up1();
