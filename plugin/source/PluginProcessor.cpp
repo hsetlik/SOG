@@ -78,7 +78,10 @@ void AudioPluginAudioProcessor::prepareToPlay(double sampleRate,
                                               int samplesPerBlock) {
   // Use this method as the place to do any pre-playback
   // initialisation that you need..
-  juce::ignoreUnused(sampleRate, samplesPerBlock);
+  juce::ignoreUnused(samplesPerBlock);
+  for (int c = 0; c < 2; ++c) {
+    octaveChannels[c].prepare(sampleRate);
+  }
 }
 
 void AudioPluginAudioProcessor::releaseResources() {
@@ -114,9 +117,17 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
                                              juce::MidiBuffer& midiMessages) {
   juce::ignoreUnused(midiMessages);
 
+  // update the parameter vars
+  d1Lvl = *tree.getRawParameterValue("down1Level");
+  d2Lvl = *tree.getRawParameterValue("down2Level");
+  upLvl = *tree.getRawParameterValue("upLevel");
+  wetDry = *tree.getRawParameterValue("wetDry");
+  octaveChannels[0].updateParams(d1Lvl, d2Lvl, upLvl, wetDry);
+  octaveChannels[1].updateParams(d1Lvl, d2Lvl, upLvl, wetDry);
+
   juce::ScopedNoDenormals noDenormals;
   auto totalNumInputChannels = getTotalNumInputChannels();
-  auto totalNumOutputChannels = getTotalNumOutputChannels();
+  // auto totalNumOutputChannels = getTotalNumOutputChannels();
 
   // In case we have more outputs than inputs, this code clears any output
   // channels that didn't contain input data, (because these aren't
@@ -124,8 +135,8 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
   // This is here to avoid people getting screaming feedback
   // when they first compile a plugin, but obviously you don't need to keep
   // this code if your algorithm always overwrites all the output channels.
-  for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-    buffer.clear(i, 0, buffer.getNumSamples());
+  // for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+  // buffer.clear(i, 0, buffer.getNumSamples());
 
   // This is the place where you'd normally do the guts of your plugin's
   // audio processing...
@@ -134,9 +145,11 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
   // Alternatively, you can process the samples with the channels
   // interleaved by keeping the same state.
   for (int channel = 0; channel < totalNumInputChannels; ++channel) {
-    auto* channelData = buffer.getWritePointer(channel);
-    juce::ignoreUnused(channelData);
-    // ..do something to the data...
+    auto* data = buffer.getWritePointer(channel);
+    OctaveGen* oct = &octaveChannels[channel];
+    for (int s = 0; s < buffer.getNumSamples(); s++) {
+      data[s] = oct->process(data[s]);
+    }
   }
 }
 

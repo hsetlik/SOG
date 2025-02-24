@@ -1,7 +1,7 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
-#include "ParameterLayout.h"
+#include "OctaveGen.h"
 
 namespace audio_plugin {
 class AudioPluginAudioProcessor : public juce::AudioProcessor {
@@ -39,6 +39,11 @@ public:
   apvts tree;
 
 private:
+  float d1Lvl;
+  float d2Lvl;
+  float upLvl;
+  float wetDry;
+  OctaveGen octaveChannels[2];
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
 };
 }  // namespace audio_plugin

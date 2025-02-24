@@ -26,10 +26,12 @@ target_sources(${PROJECT_NAME}
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
         source/ParameterLayout.cpp
+        source/OctaveGen.cpp
         ${INCLUDE_DIR}/PluginEditor.h
         ${INCLUDE_DIR}/PluginProcessor.h
         ${INCLUDE_DIR}/ParameterLayout.h
         ${INCLUDE_DIR}/Common.h
+        ${INCLUDE_DIR}/OctaveGen.h
 )
 
 # Sets the include directories of the plugin project.
